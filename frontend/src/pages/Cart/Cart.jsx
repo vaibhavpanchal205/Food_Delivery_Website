@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
-import './Cart.css'
-import { StoreContext } from '../../context/StoreContext'
+import React, { useContext } from 'react';
+import './Cart.css';
+import { StoreContext } from '../../context/StoreContext';
+import { useNavigate } from 'react-router-dom'; // Use the hook instead of Navigate
 
 const Cart = () => {
-
   const { cartItems, food_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
+  const navigate = useNavigate(); // Hook for programmatic navigation
 
   return (
     <div className='cart'>
@@ -19,10 +20,10 @@ const Cart = () => {
         </div>
         <br />
         <hr />
-        {food_list.map((item, index) => {
+        {food_list.map((item) => {
           if (cartItems[item._id] > 0) {
             return (
-              <div>
+              <div key={item._id}>
                 <div className='cart-items-title cart-items-item'>
                   <img src={item.image} alt="" />
                   <p>{item.name}</p>
@@ -32,8 +33,9 @@ const Cart = () => {
                   <p onClick={() => removeFromCart(item._id)} className='cross'>x</p>
                 </div>
               </div>
-            )
+            );
           }
+          return null; // Ensure a return value for all cases
         })}
       </div>
       <div className="cart-bottom">
@@ -55,7 +57,8 @@ const Cart = () => {
               <b>${getTotalCartAmount() + 2}</b>
             </div>
           </div>
-          <button>PROCEED TO CHECKOUT</button>
+          {/* Use navigate for programmatic navigation */}
+          <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>
         </div>
         <div className="cart-promocode">
           <div>
@@ -68,6 +71,7 @@ const Cart = () => {
         </div>
       </div>
     </div>
-  )
-}
-export default Cart
+  );
+};
+
+export default Cart;
